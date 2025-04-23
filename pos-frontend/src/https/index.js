@@ -29,3 +29,15 @@ export const updateOrderStatus = ({ orderId, orderStatus }) =>
 // Category Endpoints
 export const addCategory = (data) => axiosWrapper.post("/api/category", data);
 export const getCategories = () => axiosWrapper.get("/api/category");
+
+// Dish Endpoints
+// Modify addDish to handle FormData for file uploads
+export const addDish = (formData) => axiosWrapper.post("/api/dish", formData, {
+  headers: {
+    'Content-Type': 'multipart/form-data', // Important for file uploads
+  },
+});
+export const getDishes = (categoryId = null) => {
+  const url = categoryId ? `/api/dish?category=${categoryId}` : "/api/dish";
+  return axiosWrapper.get(url);
+};

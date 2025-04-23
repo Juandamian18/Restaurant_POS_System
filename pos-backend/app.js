@@ -16,7 +16,8 @@ app.use(cors({
     origin: ['http://localhost:5173']
 }))
 app.use(express.json()); // parse incoming request in json format
-app.use(cookieParser())
+app.use(cookieParser());
+app.use('/uploads', express.static('uploads')); // Serve uploaded files statically
 
 
 // Root Endpoint
@@ -29,7 +30,8 @@ app.use("/api/user", require("./routes/userRoute"));
 app.use("/api/order", require("./routes/orderRoute"));
 app.use("/api/table", require("./routes/tableRoute"));
 app.use("/api/payment", require("./routes/paymentRoute"));
-app.use("/api/category", require("./routes/categoryRoute")); // Add category route
+app.use("/api/category", require("./routes/categoryRoute"));
+app.use("/api/dish", require("./routes/dishRoute")); // Add dish route
 
 // Global Error Handler
 app.use(globalErrorHandler);

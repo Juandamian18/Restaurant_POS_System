@@ -4,7 +4,8 @@ import { BiSolidDish } from "react-icons/bi";
 import Metrics from "../components/dashboard/Metrics";
 import RecentOrders from "../components/dashboard/RecentOrders";
 import TableModal from "../components/dashboard/Modal"; // Rename Modal to TableModal for clarity
-import CategoryModal from "../components/dashboard/CategoryModal"; // Import the new modal
+import CategoryModal from "../components/dashboard/CategoryModal";
+import DishModal from "../components/dashboard/DishModal"; // Import the DishModal
 
 const buttons = [
   { label: "Add Table", icon: <MdTableBar />, action: "table" },
@@ -21,16 +22,18 @@ const Dashboard = () => {
   }, [])
 
   const [isTableModalOpen, setIsTableModalOpen] = useState(false);
-  const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false); // Add state for category modal
+  const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
+  const [isDishModalOpen, setIsDishModalOpen] = useState(false); // Add state for dish modal
   const [activeTab, setActiveTab] = useState("Metrics");
 
   const handleOpenModal = (action) => {
     if (action === "table") {
       setIsTableModalOpen(true);
     } else if (action === "category") {
-      setIsCategoryModalOpen(true); // Handle category action
+      setIsCategoryModalOpen(true);
+    } else if (action === "dishes") {
+      setIsDishModalOpen(true); // Handle dishes action
     }
-    // Add else if for "dishes" when implemented
   };
 
   return (
@@ -81,6 +84,8 @@ const Dashboard = () => {
       {isTableModalOpen && <TableModal setIsTableModalOpen={setIsTableModalOpen} />}
       {/* Render the actual CategoryModal */}
       {isCategoryModalOpen && <CategoryModal setIsCategoryModalOpen={setIsCategoryModalOpen} />}
+      {/* Render the actual DishModal */}
+      {isDishModalOpen && <DishModal setIsDishModalOpen={setIsDishModalOpen} />}
     </div>
   );
 };
