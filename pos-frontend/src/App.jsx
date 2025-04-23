@@ -9,7 +9,8 @@ import { Home, Auth, Orders, Tables, Menu, Dashboard } from "./pages";
 import Header from "./components/shared/Header";
 import { useSelector } from "react-redux";
 import useLoadData from "./hooks/useLoadData";
-import FullScreenLoader from "./components/shared/FullScreenLoader"
+import FullScreenLoader from "./components/shared/FullScreenLoader";
+import { Toaster } from "react-hot-toast"; // Import Toaster
 
 function Layout() {
   const isLoading = useLoadData();
@@ -66,6 +67,7 @@ function Layout() {
         />
         <Route path="*" element={<div>Not Found</div>} />
       </Routes>
+      <Toaster position="top-right" reverseOrder={false} /> {/* Add Toaster */}
     </>
   );
 }

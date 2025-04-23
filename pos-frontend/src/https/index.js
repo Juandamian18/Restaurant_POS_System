@@ -25,3 +25,7 @@ export const addOrder = (data) => axiosWrapper.post("/api/order/", data);
 export const getOrders = () => axiosWrapper.get("/api/order");
 export const updateOrderStatus = ({ orderId, orderStatus }) =>
   axiosWrapper.put(`/api/order/${orderId}`, { orderStatus });
+
+// Category Endpoints
+export const addCategory = (data) => axiosWrapper.post("/api/category", data);
+export const getCategories = () => axiosWrapper.get("/api/category");
