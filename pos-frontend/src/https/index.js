@@ -11,8 +11,10 @@ export const logout = () => axiosWrapper.post("/api/user/logout");
 // Table Endpoints
 export const addTable = (data) => axiosWrapper.post("/api/table/", data);
 export const getTables = () => axiosWrapper.get("/api/table");
-export const updateTable = ({ tableId, ...tableData }) =>
+export const updateTable = ({ tableId, ...tableData }) => // Updates status, links order
   axiosWrapper.put(`/api/table/${tableId}`, tableData);
+export const closeTable = ({ tableId }) => // New function to finalize order and free table
+    axiosWrapper.patch(`/api/table/${tableId}/close`); // Using PATCH for this action
 
 // Payment Endpoints
 export const createOrderRazorpay = (data) =>
@@ -21,10 +23,16 @@ export const verifyPaymentRazorpay = (data) =>
   axiosWrapper.post("/api/payment//verify-payment", data);
 
 // Order Endpoints
-export const addOrder = (data) => axiosWrapper.post("/api/order/", data);
+// Ensure 'orderData' includes customerDetails, bills, items, table (ID), paymentMethod etc.
+export const addOrder = (orderData) => axiosWrapper.post("/api/order/", orderData); // Creates a new order
 export const getOrders = () => axiosWrapper.get("/api/order");
 export const updateOrderStatus = ({ orderId, orderStatus }) =>
   axiosWrapper.put(`/api/order/${orderId}`, { orderStatus });
+// Adds items to an existing order and updates bills
+export const addItemsToOrder = ({ orderId, items, bills }) =>
+    axiosWrapper.patch(`/api/order/${orderId}/items`, { items, bills });
+// Fetches a single order by ID
+export const getOrderById = (orderId) => axiosWrapper.get(`/api/order/${orderId}`);
 
 // Category Endpoints
 export const addCategory = (data) => axiosWrapper.post("/api/category", data);

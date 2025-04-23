@@ -6,15 +6,71 @@ import MenuContainer from "../components/menu/MenuContainer";
 import CustomerInfo from "../components/menu/CustomerInfo";
 import CartInfo from "../components/menu/CartInfo";
 import Bill from "../components/menu/Bill";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { getOrderById } from "../https/index";
+import { loadCartFromOrder, removeAllItems } from "../redux/slices/cartSlice"; // Import removeAllItems here
+import { setCustomer } from "../redux/slices/customerSlice";
+import toast from "react-hot-toast";
 
 const Menu = () => {
-
-    useEffect(() => {
-      document.title = "POS | Menu"
-    }, [])
-
+  const dispatch = useDispatch();
   const customerData = useSelector((state) => state.customer);
+  const currentOrderId = useSelector((state) => state.customer.currentOrderId);
+
+  useEffect(() => {
+    document.title = "POS | Menu";
+  }, []);
+
+  // Effect to load existing order details if currentOrderId exists
+  useEffect(() => {
+    const fetchAndLoadOrder = async (orderId) => {
+      try {
+        console.log(`Fetching order details for ID: ${orderId}`);
+        const response = await getOrderById(orderId);
+        const order = response.data.data; // Assuming API returns { success: true, data: order }
+        console.log("Fetched order:", order);
+
+        if (order && order.items) {
+          // Load items into the cart
+          dispatch(loadCartFromOrder(order.items));
+          console.log("Cart loaded from order items:", order.items);
+
+          // Optionally update customer details from the order
+          // This ensures consistency if details were entered previously for this order
+          if (order.customerDetails) {
+             dispatch(setCustomer({
+                 name: order.customerDetails.name,
+                 phone: order.customerDetails.phone,
+                 guests: order.customerDetails.guests
+             }));
+             console.log("Customer details updated from order:", order.customerDetails);
+          }
+
+        } else {
+             console.warn("Fetched order data is missing items array:", order);
+             // Clear cart if order has no items? Or handle as needed.
+             // dispatch(removeAllItems());
+        }
+      } catch (error) {
+        console.error("Error fetching order details:", error);
+        toast.error(`Failed to load existing order details: ${error.response?.data?.message || 'Server error'}`);
+        // Decide how to handle error - maybe clear cart/customer?
+        // dispatch(removeAllItems());
+        // dispatch(removeCustomer()); // This might be too drastic
+      }
+    };
+
+    if (currentOrderId) {
+      // Existing order found, fetch its details
+      fetchAndLoadOrder(currentOrderId);
+    } else {
+      // No current order ID means it's a new order for this table, clear any lingering cart items
+      console.log("No currentOrderId found, clearing cart for new table.");
+      dispatch(removeAllItems());
+    }
+    // Dependency array includes currentOrderId to refetch if it changes
+  }, [currentOrderId, dispatch]);
+
 
   return (
     <section className="bg-[#1f1f1f] h-[calc(100vh-5rem)] overflow-hidden flex gap-3">

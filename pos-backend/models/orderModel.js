@@ -2,9 +2,9 @@ const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema({
     customerDetails: {
-        name: { type: String, required: true },
-        phone: { type: String, requried: true},
-        guests: { type: Number, required: true },
+        name: { type: String, default: 'Walk-in Customer' }, // Make optional, provide default
+        phone: { type: String, default: 'N/A' }, // Make optional, provide default
+        guests: { type: Number, required: true, default: 1 }, // Keep guests required, add default
     },
     orderStatus: {
         type: String,

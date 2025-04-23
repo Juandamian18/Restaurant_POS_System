@@ -16,6 +16,8 @@ const CartInfo = () => {
         behavior: "smooth"
       })
     }
+    // Add cartData dependency explicitly, although useSelector should handle this.
+    // This might help if there are subtle timing issues with state updates.
   },[cartData]);
 
   const handleRemove = (itemId) => {

@@ -57,14 +57,12 @@ const Tables = () => {
       </div>
 
       <div className="grid grid-cols-5 gap-3 px-16 py-4 h-[650px] overflow-y-scroll scrollbar-hide">
-        {resData?.data.data.map((table) => {
+        {resData?.data?.data?.map((table) => { // Add optional chaining for safety
+          // Pass the whole table object to TableCard
           return (
             <TableCard
-              id={table._id}
-              name={table.tableNo}
-              status={table.status}
-              initials={table?.currentOrder?.customerDetails.name}
-              seats={table.seats}
+              key={table._id} // Use key here
+              table={table} // Pass the entire table object
             />
           );
         })}
